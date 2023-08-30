@@ -25,3 +25,8 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
 //routes todo
+
+/** listen for requests */
+httpServer.listen(config.server.port, () => {
+    logging.info(`Server is running at ${config.server.host}:${config.server.port}... `);
+});
