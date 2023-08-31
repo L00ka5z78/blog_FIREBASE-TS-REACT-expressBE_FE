@@ -1,4 +1,4 @@
-import IRoute from '../interfaces/route';
+import { IRoute } from '../interfaces/';
 
 const authRoutes: IRoute[] = [];
 
