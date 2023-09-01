@@ -5,6 +5,11 @@ import { useHistory } from 'react-router-dom';
 import firebase from 'firebase/compat';
 import { SignInWithSocialMedia as SocialMediaPopup } from '../modules/auth';
 import logging from '../config/loging';
+import { Card, CardHeader, CardBody, Button } from 'reactstrap';
+import { CenterPiece } from '../components/CenterPiece/CenterPiece';
+import { LoadingComponent } from '../components/Loading/LoadingComponent';
+import { Providers } from '../config/firebase';
+import { ErrorText } from '../components/Error/ErrorText';
 
 export const LoginPage = (props: IPageProps) => {
     const [authenticating, setAuthenticating] = useState<boolean>(false);
@@ -55,5 +60,26 @@ export const LoginPage = (props: IPageProps) => {
             });
     };
 
-    return <p>Login Page</p>;
+    return (
+        <CenterPiece>
+            <Card>
+                <CardHeader>{isLogin ? 'Login' : 'Sign Up'}</CardHeader>
+                <CardBody>
+                    <ErrorText error={error} />
+                    <Button
+                        block
+                        disabled={authenticating}
+                        onClick={() => SignInWithSocialMedia(Providers.google)}
+                        style={{
+                            backgroundColor: '#ea4335',
+                            borderColor: '#ea4335'
+                        }}
+                    >
+                        <i className="fa-brands fa-google mr-2"></i> Sign {isLogin ? 'in' : 'up'} with Google
+                    </Button>
+                    {authenticating && <LoadingComponent card={false} />}
+                </CardBody>
+            </Card>
+        </CenterPiece>
+    );
 };
