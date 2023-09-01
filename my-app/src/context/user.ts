@@ -1,3 +1,4 @@
+import { Dispatch, createContext } from 'react';
 import { DEFAULT_FIRE_TOKEN, DEFAULT_USER, IUser } from '../interfaces';
 
 export interface IUserState {
@@ -32,3 +33,16 @@ export const userReducer = (state: IUserState, action: IUserActions) => {
             return state;
     }
 };
+
+export interface IUserContextProps {
+    userState: IUserState;
+    userDispatch: Dispatch<IUserActions>;
+}
+
+export const UserContext = createContext<IUserContextProps>({
+    userState: initialUserState,
+    userDispatch: () => {}
+});
+
+export const UserContextConsumer = UserContext.Consumer;
+export const UserContextProvider = UserContext.Provider;
