@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardBody } from 'reactstrap';
+import { CenterPiece } from '../CenterPiece/CenterPiece';
 
 export interface ILoadingProps {
     dotType?: string;
@@ -33,11 +34,13 @@ export const LoadingComponent = (props: ILoadingComponentProps) => {
 
     if (card) {
         return (
-            <Card>
-                <CardBody>
-                    <Loading dotType={dotType}>{children}</Loading>
-                </CardBody>
-            </Card>
+            <CenterPiece>
+                <Card>
+                    <CardBody>
+                        <Loading dotType={dotType}>{children}</Loading>
+                    </CardBody>
+                </Card>
+            </CenterPiece>
         );
     }
     return <Loading dotType={dotType}>{children}</Loading>;

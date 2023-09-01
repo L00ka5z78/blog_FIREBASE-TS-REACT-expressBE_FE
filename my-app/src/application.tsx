@@ -2,7 +2,8 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import routes from './config/routes';
 import { RouteChildrenProps } from 'react-router-dom';
-import { initialUserState, userReducer } from './context/user';
+import { UserContextProvider, initialUserState, userReducer } from './context/user';
+import { LoadingComponent } from './components/Loading/LoadingComponent';
 
 export interface IApplicationProps {}
 
@@ -49,13 +50,16 @@ export const Application = (props: IApplicationProps) => {
         userDispatch
     };
     if (loading) {
+        return <LoadingComponent>{authState}</LoadingComponent>;
     }
 
     return (
-        <Switch>
-            {routes.map((route, index) => {
-                return <Route key={index} exact={route.exact} path={route.path} render={(routeProps: RouteChildrenProps<any>) => <route.component {...routeProps} />} />;
-            })}
-        </Switch>
+        <UserContextProvider value={userContextValues}>
+            <Switch>
+                {routes.map((route, index) => {
+                    return <Route key={index} exact={route.exact} path={route.path} render={(routeProps: RouteChildrenProps<any>) => <route.component {...routeProps} />} />;
+                })}
+            </Switch>
+        </UserContextProvider>
     );
 };
