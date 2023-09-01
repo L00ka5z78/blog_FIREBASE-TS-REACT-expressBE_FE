@@ -6,11 +6,29 @@ export interface IUserState {
 }
 
 export interface IUserActions {
-    type: 'login' | 'logout' | 'authenticate';
+    type: 'login' | 'logout';
     payload: IUserState;
 }
 
 export const initialUserState: IUserState = {
     user: DEFAULT_USER,
     fire_token: DEFAULT_FIRE_TOKEN
+};
+
+export const userReducer = (state: IUserState, action: IUserActions) => {
+    let user = action.payload.user;
+    let fire_token = action.payload.fire_token;
+
+    switch (action.type) {
+        case 'login':
+            localStorage.setItem('fire_token', fire_token);
+
+            return { user, fire_token };
+        case 'logout':
+            localStorage.removeItem('fire_token');
+
+            return initialUserState;
+        default:
+            return state;
+    }
 };
