@@ -4,6 +4,7 @@ import routes from './config/routes';
 import { RouteChildrenProps } from 'react-router-dom';
 import { UserContextProvider, initialUserState, userReducer } from './context/user';
 import { LoadingComponent } from './components/Loading/LoadingComponent';
+import { AuthRoute } from './components/AuthRoute/AuthRoute';
 
 export interface IApplicationProps {}
 
@@ -57,6 +58,19 @@ export const Application = (props: IApplicationProps) => {
         <UserContextProvider value={userContextValues}>
             <Switch>
                 {routes.map((route, index) => {
+                    if (route.auth) {
+                        <Route
+                            key={index}
+                            exact={route.exact}
+                            path={route.path}
+                            render={(routeProps: RouteChildrenProps<any>) => (
+                                <AuthRoute>
+                                    <route.component {...routeProps} />
+                                </AuthRoute>
+                            )}
+                        />;
+                    }
+
                     return <Route key={index} exact={route.exact} path={route.path} render={(routeProps: RouteChildrenProps<any>) => <route.component {...routeProps} />} />;
                 })}
             </Switch>
