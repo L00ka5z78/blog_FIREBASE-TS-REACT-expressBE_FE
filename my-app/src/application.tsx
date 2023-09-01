@@ -14,8 +14,42 @@ export const Application = (props: IApplicationProps) => {
     const [authState, setAuthState] = useState<string>('Checking localstorage ... ...');
 
     useEffect(() => {
-        setTimeout(() => {}, 1000);
+        setTimeout(() => {
+            CheckLocalStorageForCredentials();
+        }, 1000);
     }, []);
+    /** check to see if we have token.
+     * if we do, verify it with BE
+     * if not we are logged out initially
+     */
+
+    const CheckLocalStorageForCredentials = () => {
+        setAuthState('Checking credentials ...');
+
+        const fire_token = localStorage.getItem('fire_token');
+
+        if (fire_token === null) {
+            userDispatch({ type: 'logout', payload: initialUserState });
+            setAuthState('No credentials found');
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
+        } else {
+            /** validate with backend later, now hold the placeholder*/
+            setAuthState('credentials found, checking ... ...');
+
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
+        }
+    };
+
+    const userContextValues = {
+        userState,
+        userDispatch
+    };
+    if (loading) {
+    }
 
     return (
         <Switch>
