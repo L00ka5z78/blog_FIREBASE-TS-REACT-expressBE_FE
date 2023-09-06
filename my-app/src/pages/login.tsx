@@ -25,7 +25,7 @@ export const LoginPage = (props: IPageProps) => {
         setAuthenticating(true);
 
         SocialMediaPopup(provider)
-            .then(async (result: any) => {
+            .then(async (result) => {
                 logging.info(result);
                 let user = result.user;
                 if (user) {
@@ -54,7 +54,7 @@ export const LoginPage = (props: IPageProps) => {
                     setAuthenticating(false);
                 }
             })
-            .catch((error: any) => {
+            .catch((error) => {
                 setError(error.message);
                 setAuthenticating(false);
             });
