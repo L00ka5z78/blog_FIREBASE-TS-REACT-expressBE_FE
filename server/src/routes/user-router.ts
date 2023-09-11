@@ -8,8 +8,8 @@ userRouter
 
     .get('/:userID', read)
 
-    .post('/create', create)
+    .post('/create', extractFirebaseInfo, create)
 
-    .post('/login', login)
+    .post('/login', extractFirebaseInfo, login)
 
     .get('/', readAll);

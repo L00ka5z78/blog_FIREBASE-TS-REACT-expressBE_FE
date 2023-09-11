@@ -26,7 +26,7 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
 //routes todo
-router.use('/user', userRouter);
+router.use('/users', userRouter);
 
 /** listen for requests */
 httpServer.listen(config.server.port, () => {
