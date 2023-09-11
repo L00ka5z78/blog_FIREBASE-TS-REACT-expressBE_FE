@@ -50,7 +50,29 @@ export const create = (req: Request, res: Response, next: NextFunction) => {
         });
 };
 
-export const login = (req: Request, res: Response, next: NextFunction) => {};
+export const login = (req: Request, res: Response, next: NextFunction) => {
+    logging.info('Logging in user ...');
+
+    let { uid } = req.body;
+    let fire_token = res.locals.fire_token;
+
+    return User.findOne({ uid })
+        .then((user) => {
+            if (user) {
+                logging.info(`User ${uid} found. Signing in  ...`);
+                return res.status(200).json({ user, fire_token });
+            } else {
+                logging.info(`User ${uid} not found. Please register...`);
+                return create(req, res, next);
+            }
+        })
+        .catch((error) => {
+            logging.error(error);
+            return res.status(500).json({
+                error
+            });
+        });
+};
 
 export const read = (req: Request, res: Response, next: NextFunction) => {};
 
