@@ -7,7 +7,7 @@ export interface Props {
 export const ErrorText = (props: Props) => {
     const { error } = props;
 
-    if (error) return null;
+    if (error === '') return null;
 
     return <small className="text-danger">{error}</small>;
 };

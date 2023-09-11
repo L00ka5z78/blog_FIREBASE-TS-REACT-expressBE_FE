@@ -5,6 +5,8 @@ import { RouteChildrenProps } from 'react-router-dom';
 import { UserContextProvider, initialUserState, userReducer } from './context/user';
 import { LoadingComponent } from './components/Loading/LoadingComponent';
 import { AuthRoute } from './components/AuthRoute/AuthRoute';
+import { Validate } from './modules/auth';
+import logging from './config/loging';
 
 export interface IApplicationProps {}
 
@@ -37,12 +39,22 @@ export const Application = (props: IApplicationProps) => {
                 setLoading(false);
             }, 1000);
         } else {
-            /** validate with backend later, now hold the placeholder*/
-            setAuthState('credentials found, checking ... ...');
-
-            setTimeout(() => {
-                setLoading(false);
-            }, 1000);
+            return Validate(fire_token, (error, user) => {
+                if (error) {
+                    logging.error(error);
+                    setAuthState('User not found, logging out...');
+                    userDispatch({ type: 'logout', payload: initialUserState });
+                    setTimeout(() => {
+                        setLoading(false);
+                    }, 1000);
+                } else if (user) {
+                    setAuthState('User authenticated...');
+                    userDispatch({ type: 'login', payload: { user, fire_token } });
+                    setTimeout(() => {
+                        setLoading(false);
+                    }, 1000);
+                }
+            });
         }
     };
 
