@@ -74,6 +74,41 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
         });
 };
 
-export const read = (req: Request, res: Response, next: NextFunction) => {};
+export const read = (req: Request, res: Response, next: NextFunction) => {
+    const _id = req.params.userID;
+    logging.info(`Incoming read for ${_id}... ...`);
 
-export const readAll = (req: Request, res: Response, next: NextFunction) => {};
+    return User.findById(_id)
+        .then((user) => {
+            if (user) {
+                return res.status(200).json({ user });
+            } else {
+                return res.status(400).json({ message: 'not found' });
+            }
+        })
+        .catch((error) => {
+            logging.error(error);
+            return res.status(500).json({
+                error
+            });
+        });
+};
+
+export const readAll = (req: Request, res: Response, next: NextFunction) => {
+    logging.info(`Incoming read for all users`);
+
+    return User.find()
+        .exec()
+        .then((users) => {
+            return res.status(200).json({
+                count: users.length,
+                users
+            });
+        })
+        .catch((error) => {
+            logging.error(error);
+            return res.status(500).json({
+                error
+            });
+        });
+};
