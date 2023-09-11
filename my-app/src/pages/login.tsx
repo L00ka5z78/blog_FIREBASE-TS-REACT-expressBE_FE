@@ -1,15 +1,15 @@
 import React, { useContext, useState } from 'react';
-import { IPageProps } from '../interfaces';
-import { UserContext } from '../context/user';
 import { useHistory } from 'react-router-dom';
 import firebase from 'firebase/compat';
-import { SignInWithSocialMedia as SocialMediaPopup } from '../modules/auth';
-import logging from '../config/loging';
-import { Card, CardHeader, CardBody, Button } from 'reactstrap';
+import { Authenticate, SignInWithSocialMedia as SocialMediaPopup } from '../modules/auth';
 import { CenterPiece } from '../components/CenterPiece/CenterPiece';
-import { LoadingComponent } from '../components/Loading/LoadingComponent';
+import { Button, Card, CardBody, CardHeader } from 'reactstrap';
 import { Providers } from '../config/firebase';
+import { UserContext } from '../context/user';
+import { IPageProps } from '../interfaces';
+import logging from '../config/loging';
 import { ErrorText } from '../components/Error/ErrorText';
+import { LoadingComponent } from '../components/Loading/LoadingComponent';
 
 export const LoginPage = (props: IPageProps) => {
     const [authenticating, setAuthenticating] = useState<boolean>(false);
@@ -36,6 +36,18 @@ export const LoginPage = (props: IPageProps) => {
                             let fire_token = await user.getIdToken();
 
                             /** if we get token, auth with BE */
+                            Authenticate(uid, name, fire_token, (error, _user) => {
+                                if (error) {
+                                    setError(error);
+                                    setAuthenticating(false);
+                                } else if (_user) {
+                                    userContext.userDispatch({
+                                        type: 'login',
+                                        payload: { user: _user, fire_token }
+                                    });
+                                    history.push('/');
+                                }
+                            });
                         } catch (error) {
                             setError('Invalid token');
                             logging.error(error);
