@@ -8,5 +8,5 @@ export interface IBlog {
     headline: string;
     picture?: string;
     createdAt: string;
-    updateAt: string;
+    updatedAt: string;
 }
