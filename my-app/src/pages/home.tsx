@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IBlog, IPageProps } from '../interfaces';
+import { IBlog, IPageProps, IUser } from '../interfaces';
 import { Navigation } from '../components/Navigation/navbar';
 import { Header } from '../components/Header/header';
 import { Container } from 'reactstrap';
@@ -8,6 +8,8 @@ import axios from 'axios';
 import logging from '../config/loging';
 import { LoadingComponent } from '../components/Loading/LoadingComponent';
 import { Link } from 'react-router-dom';
+import { BlogPreview } from '../components/Blog/BlogPreviev';
+import { ErrorText } from '../components/Error/ErrorText';
 
 export const HomePage = (props: IPageProps) => {
     const [blogs, setBlogs] = useState<IBlog[]>([]);
@@ -54,8 +56,14 @@ export const HomePage = (props: IPageProps) => {
                     </p>
                 )}
                 {blogs.map((blog, index) => {
-                    return <div key={index}>bla bla bla....</div>;
+                    return (
+                        <div key={index}>
+                            <BlogPreview _id={blog._id} author={(blog.author as IUser).name} headline={blog.headline} title={blog.title} createdAt={blog.createdAt} updatedAt={blog.updatedAt} />
+                            <hr />
+                        </div>
+                    );
                 })}
+                <ErrorText error={error} />
             </Container>
         </Container>
     );

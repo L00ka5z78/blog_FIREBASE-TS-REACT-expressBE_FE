@@ -9,7 +9,7 @@ export interface IBlogPreviewProps {
     headline: string;
     createdAt: string;
     updatedAt: string;
-    children: any;
+    children?: any;
 }
 export const BlogPreview = (props: IBlogPreviewProps) => {
     const { _id, author, children, createdAt, updatedAt, headline, title } = props;
@@ -21,7 +21,19 @@ export const BlogPreview = (props: IBlogPreviewProps) => {
                     <h1>
                         <strong>{title}</strong>
                     </h1>
+                    <h3>{headline}</h3>
+                    <br />
                 </Link>
+                {createdAt !== updatedAt ? (
+                    <p>
+                        Updated by {author} at {new Date(updatedAt).toLocaleString()}
+                    </p>
+                ) : (
+                    <p>
+                        Posted by {author} at {new Date(createdAt).toLocaleString()}
+                    </p>
+                )}
+                {children}
             </CardBody>
         </Card>
     );
