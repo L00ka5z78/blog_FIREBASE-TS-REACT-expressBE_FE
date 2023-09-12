@@ -4,7 +4,7 @@ import logging from './config/loging';
 import config from './config/config';
 import mongoose from 'mongoose';
 import { apiAccess, dbConnection, errorHandling, firebseConnection, logMiddleware } from './utils';
-import { userRouter } from './routes';
+import { blogRouter, userRouter } from './routes';
 
 const router = express();
 
@@ -27,6 +27,7 @@ router.use(express.json());
 
 //routes
 router.use('/users', userRouter);
+router.use('/blogs', blogRouter);
 
 /** listen for requests */
 httpServer.listen(config.server.port, () => {
