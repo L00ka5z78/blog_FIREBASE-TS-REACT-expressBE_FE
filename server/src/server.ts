@@ -25,7 +25,7 @@ apiAccess(); /** api access policies */
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
-//routes todo
+//routes
 router.use('/users', userRouter);
 
 /** listen for requests */
