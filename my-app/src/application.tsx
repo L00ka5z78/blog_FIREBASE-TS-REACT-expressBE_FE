@@ -71,16 +71,18 @@ export const Application = (props: IApplicationProps) => {
             <Switch>
                 {routes.map((route, index) => {
                     if (route.auth) {
-                        <Route
-                            key={index}
-                            exact={route.exact}
-                            path={route.path}
-                            render={(routeProps: RouteChildrenProps<any>) => (
-                                <AuthRoute>
-                                    <route.component {...routeProps} />
-                                </AuthRoute>
-                            )}
-                        />;
+                        return (
+                            <Route
+                                key={index}
+                                exact={route.exact}
+                                path={route.path}
+                                render={(routeProps: RouteChildrenProps<any>) => (
+                                    <AuthRoute>
+                                        <route.component {...routeProps} />
+                                    </AuthRoute>
+                                )}
+                            />
+                        );
                     }
 
                     return <Route key={index} exact={route.exact} path={route.path} render={(routeProps: RouteChildrenProps<any>) => <route.component {...routeProps} />} />;

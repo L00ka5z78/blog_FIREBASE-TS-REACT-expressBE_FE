@@ -4,7 +4,7 @@ import { create, deleteBlog, query, read, readAll, update } from '../controllers
 export const blogRouter = Router();
 blogRouter
 
-    .get('/:blogID', read)
+    .get('/read/:blogID', read)
 
     .post('/create', create)
 
