@@ -1,6 +1,6 @@
 import { IRoute } from '../interfaces/';
 import { BlogPage } from '../pages/blog';
-import { EditPage } from '../pages/edit';
+import EditPage from '../pages/edit';
 import { HomePage } from '../pages/home';
 import { LoginPage } from '../pages/login';
 
