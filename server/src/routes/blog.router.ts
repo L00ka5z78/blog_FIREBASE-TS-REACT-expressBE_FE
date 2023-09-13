@@ -10,7 +10,7 @@ blogRouter
 
     .post('/query', query)
 
-    .post('/update/:blogId', update)
+    .patch('/update/:blogId', update)
 
     .delete('/:blogId', deleteBlog)
 
