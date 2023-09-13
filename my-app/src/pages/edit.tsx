@@ -8,6 +8,7 @@ import axios from 'axios';
 import logging from '../config/loging';
 import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
+import { LoadingComponent } from '../components/Loading/LoadingComponent';
 
 export const EditPage = (props: IPageProps & RouteComponentProps<any>) => {
     const [_id, setId] = useState<string>('');
@@ -107,6 +108,44 @@ export const EditPage = (props: IPageProps & RouteComponentProps<any>) => {
             setSaving(false);
         }
     };
+
+    const editBlog = async () => {
+        if (title === '' || headline === '' || content === '') {
+            setError('Please fill out all required forms');
+            setSuccess('');
+            return null;
+        }
+        setError('');
+        setSuccess('');
+        setSaving(true);
+
+        try {
+            const response = await axios({
+                method: 'PATCH',
+                url: `${config.server.url}/blogs/update/${_id}`,
+                data: {
+                    title,
+                    picture,
+                    headline,
+                    content,
+                    author: user._id
+                }
+            });
+
+            if (response.status === 201) {
+                setSuccess('Blog updated');
+            } else {
+                setError('Unable to save blog');
+            }
+        } catch (error: any) {
+            setError(error.message);
+        } finally {
+            setSaving(false);
+        }
+    };
+    if (loading) {
+        return <LoadingComponent>Loading editor ...</LoadingComponent>;
+    }
 
     return <p>Edit Page</p>;
 };
