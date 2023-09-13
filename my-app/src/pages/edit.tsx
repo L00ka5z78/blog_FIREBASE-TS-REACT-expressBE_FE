@@ -72,5 +72,41 @@ export const EditPage = (props: IPageProps & RouteComponentProps<any>) => {
         }
     };
 
+    const createBlog = async () => {
+        if (title === '' || headline === '' || content === '') {
+            setError('Please fill out all required forms');
+            setSuccess('');
+            return null;
+        }
+        setError('');
+        setSuccess('');
+        setSaving(true);
+
+        try {
+            const response = await axios({
+                method: 'POST',
+                url: `${config.server.url}/blogs/create`,
+                data: {
+                    title,
+                    picture,
+                    headline,
+                    content,
+                    author: user._id
+                }
+            });
+
+            if (response.status === 201) {
+                setId(response.data.blog._id);
+                setSuccess('Blog posted. You can continue to edit on this page');
+            } else {
+                setError('Unable to save blog');
+            }
+        } catch (error: any) {
+            setError(error.message);
+        } finally {
+            setSaving(false);
+        }
+    };
+
     return <p>Edit Page</p>;
 };
