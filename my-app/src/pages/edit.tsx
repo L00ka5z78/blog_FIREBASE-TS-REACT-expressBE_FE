@@ -1,26 +1,29 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { IBlog, IPageProps } from '../interfaces';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState, convertToRaw } from 'draft-js';
-import { UserContext } from '../context/user';
-import { RouteComponentProps } from 'react-router-dom';
-import config from '../config/config';
 import axios from 'axios';
-import logging from '../config/loging';
-import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+import { UserContext } from '../context/user';
+import { IBlog, IPageProps } from '../interfaces';
+import config from '../config/config';
+import logging from '../config/loging';
 import { LoadingComponent } from '../components/Loading/LoadingComponent';
-import { Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import { Navigation } from '../components/Navigation/navbar';
-import { Header } from '../components/Header/header';
 import { ErrorText } from '../components/Error/ErrorText';
+import { Header } from '../components/Header/header';
+import { SuccessText } from '../components/Succes/SuccessText';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-export const EditPage = (props: IPageProps & RouteComponentProps<any>) => {
+const EditPage = (props: IPageProps & RouteComponentProps<any>) => {
     const [_id, setId] = useState<string>('');
     const [title, setTitle] = useState<string>('');
     const [picture, setPicture] = useState<string>('');
     const [content, setContent] = useState<string>('');
     const [headline, setHeadline] = useState<string>('');
-    const [_editorState, setEditorState] = useState<EditorState>(EditorState.createEmpty());
+    const [editorState, setEditorState] = useState<EditorState>(EditorState.createEmpty());
 
     const [saving, setSaving] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
@@ -183,9 +186,61 @@ export const EditPage = (props: IPageProps & RouteComponentProps<any>) => {
 
                     <FormGroup>
                         <Label>Content</Label>
+                        <Editor
+                            editorState={editorState}
+                            wrapperClassName="card"
+                            editorClassName="card-body"
+                            onEditorStateChange={(newState) => {
+                                setEditorState(newState);
+                                setContent(draftToHtml(convertToRaw(newState.getCurrentContent())));
+                            }}
+                            toolbar={{
+                                options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'history', 'embedded', 'emoji', 'image'],
+                                inline: { inDropdown: true },
+                                list: { inDropdown: true },
+                                textAlign: { inDropdown: true },
+                                link: { inDropdown: true },
+                                history: { inDropdown: true }
+                            }}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <SuccessText success={success} />
+                    </FormGroup>
+                    <FormGroup>
+                        <Button
+                            block
+                            onClick={() => {
+                                if (_id !== '') {
+                                    editBlog();
+                                } else {
+                                    createBlog();
+                                }
+                            }}
+                            disabled={saving}
+                        >
+                            <i className="fas fa-save mr1"></i>
+                            {_id !== '' ? 'Update' : 'Post'}
+                        </Button>
+                        {_id !== '' && (
+                            <Button block color="success" tag={Link} to={`/blogs/${_id}`}>
+                                View your blog post
+                            </Button>
+                        )}
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>Preview</Label>
+                        <div className="border p-2">
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: content
+                                }}
+                            />
+                        </div>
                     </FormGroup>
                 </Form>
             </Container>
         </Container>
     );
 };
+export default withRouter(EditPage);
