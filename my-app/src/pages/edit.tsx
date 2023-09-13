@@ -9,6 +9,10 @@ import logging from '../config/loging';
 import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
 import { LoadingComponent } from '../components/Loading/LoadingComponent';
+import { Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Navigation } from '../components/Navigation/navbar';
+import { Header } from '../components/Header/header';
+import { ErrorText } from '../components/Error/ErrorText';
 
 export const EditPage = (props: IPageProps & RouteComponentProps<any>) => {
     const [_id, setId] = useState<string>('');
@@ -147,5 +151,41 @@ export const EditPage = (props: IPageProps & RouteComponentProps<any>) => {
         return <LoadingComponent>Loading editor ...</LoadingComponent>;
     }
 
-    return <p>Edit Page</p>;
+    return (
+        <Container className="p-0" fluid>
+            <Navigation />
+            <Header headline="" title={_id !== '' ? 'Edit your blog, please' : 'Create a Blog'} />
+            <Container className="mt-5 mb-5">
+                <ErrorText error={error} />
+                <Form>
+                    <FormGroup>
+                        <Label for="title">Title *</Label>
+                        <Input type="text" name="title" value={title} id="title" placeholder="Enter a title" disabled={saving} onChange={(event) => setTitle(event.target.value)} />
+                    </FormGroup>
+
+                    <FormGroup>
+                        <Label for="picture">Picture URL</Label>
+                        <Input
+                            type="text"
+                            name="picture"
+                            value={title}
+                            id="picture"
+                            placeholder="Picture url, as http://......."
+                            disabled={saving}
+                            onChange={(event) => setPicture(event.target.value)}
+                        />
+                    </FormGroup>
+
+                    <FormGroup>
+                        <Label for="headline">Headline *</Label>
+                        <Input type="text" name="headline" value={title} id="headline" placeholder="Enter a headline" disabled={saving} onChange={(event) => setHeadline(event.target.value)} />
+                    </FormGroup>
+
+                    <FormGroup>
+                        <Label>Content</Label>
+                    </FormGroup>
+                </Form>
+            </Container>
+        </Container>
+    );
 };
