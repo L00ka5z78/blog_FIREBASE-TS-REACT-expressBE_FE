@@ -6,7 +6,7 @@ export const userRouter = Router();
 userRouter
     .get('/validate', extractFirebaseInfo, validate)
 
-    .get('/:userID', read)
+    .get('/read/:userID', read)
 
     .post('/create', extractFirebaseInfo, create)
 
