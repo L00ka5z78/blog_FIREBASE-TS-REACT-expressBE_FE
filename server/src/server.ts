@@ -2,14 +2,21 @@ import http from 'http';
 import express from 'express';
 import logging from './config/loging';
 import config from './config/config';
-import mongoose from 'mongoose';
 import { apiAccess, dbConnection, errorHandling, firebseConnection, logMiddleware } from './utils';
 import { blogRouter, userRouter } from './routes';
+import cors from 'cors';
 
 const router = express();
-
 /** Server handling */
 const httpServer = http.createServer(router);
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+
+    methods: ['POST', 'PATCH', 'GET', 'DELETE'],
+    credentials: true
+};
+router.use(cors(corsOptions));
 
 /** Connect to firebase admin */
 let serviceAccountKey = require('./config/serviceAccountKey.json');

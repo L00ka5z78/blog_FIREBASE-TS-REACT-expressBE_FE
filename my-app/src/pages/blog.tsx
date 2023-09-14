@@ -30,6 +30,7 @@ const BlogPage = (props: RouteComponentProps<any>) => {
         } else {
             history.push('/');
         }
+        // eslint disable-next-line
     }, []);
 
     useEffect(() => {
